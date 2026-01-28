@@ -1,0 +1,138 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore Hafsa's blogs on programming, technology, and development. Stay updated with the latest insights and tutorials.">
+    <meta name="keywords" content="Hafsa Jehangir, Blogs, Programming, Technology, Development, Tutorials, Web Development, Cybersecurity, Coding">
+    <meta name="author" content="Hafsa Jehangir">
+    <meta property="og:title" content="Hafsa's Blogs">
+    <meta property="og:description" content="Explore Hafsa's blogs on programming, technology, and development. Stay updated with the latest insights and tutorials.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hafsa-jehangir.github.io/portfolio/blogs.html">
+    <meta property="og:image" content="https://github.com/hafsa-jehangir/portfolio/blob/main/assets/favicon.png">
+    <title>Hafsa's Blogs</title>
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon.png">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "WebPage",
+        "name": "Hafsa's Blogs",
+        "description": "Explore Hafsa's blogs on programming, technology, and development. Stay updated with the latest insights and tutorials.",
+        "url": "https://hafsa-jehangir.github.io/portfolio/blogs.html",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "url": "https://hafsa-jehangir.github.io/portfolio/blogs.html"
+        }
+    }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .blog-card {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        .blog-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .view-btn {
+            background-color: #0a84ff;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.8rem;
+        }
+        .view-btn:hover {
+            background-color: #00c2cb;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .blog-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .view-btn {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hafsa's Blogs</h1>
+    <div id="blog-list">Loading blogs...</div>
+
+    <script>
+        const username = "hafsa-jehangir";  // updated GitHub username
+        const repo = "portfolio";
+        const folder = "blogs";
+
+        async function getBlogList() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folder}`);
+                const files = await res.json();
+                if (!Array.isArray(files)) throw new Error("Failed to fetch files");
+                return files.filter(file => file.name.endsWith(".md")).map(file => file.name);
+            } catch (error) {
+                console.error(error);
+                return [];
+            }
+        }
+
+        async function displayBlogTitles() {
+            const blogList = await getBlogList();
+            const blogContainer = document.getElementById("blog-list");
+            blogContainer.innerHTML = "";
+
+            if (blogList.length === 0) {
+                blogContainer.textContent = "No blogs found!";
+                return;
+            }
+
+            blogList.forEach(blog => {
+                const card = document.createElement("div");
+                card.className = "blog-card";
+
+                const title = document.createElement("div");
+                title.className = "blog-title";
+                title.textContent = blog.replace(".md", "");
+
+                const btn = document.createElement("a");
+                btn.className = "view-btn";
+                btn.textContent = "View";
+                btn.href = `blog.html?file=${blog}`;
+                btn.setAttribute("aria-label", `View the blog titled ${blog.replace(".md", "")}`);
+
+                card.appendChild(title);
+                card.appendChild(btn);
+                blogContainer.appendChild(card);
+            });
+        }
+
+        displayBlogTitles();
+    </script>
+</body>
+</html>
